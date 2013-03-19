@@ -2,6 +2,7 @@ package mk.ukim.finki.rmandroid.utility;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,11 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
 
-public class DrawableManager {
+public class DrawableManager implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final Map<String, Drawable> drawableMap;
 
 	public DrawableManager() {

@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class StartActivity extends Activity {
@@ -56,6 +59,16 @@ public class StartActivity extends Activity {
 
 		lvGropus = (ListView) findViewById(R.id.lvGroups);
 		lvGropus.setAdapter(adapter);
+		lvGropus.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				Intent i=new Intent(StartActivity.this,MainActivity.class);
+				i.putExtra("position", position);
+				startActivity(i);			
+			}
+		});
 
 	}
 

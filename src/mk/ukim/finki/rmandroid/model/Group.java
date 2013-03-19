@@ -1,6 +1,12 @@
 package mk.ukim.finki.rmandroid.model;
 
-public class Group {
+import java.io.Serializable;
+
+public class Group implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int ID;
 	private String backgroundImage;
 	private String description;

@@ -4,5 +4,6 @@
     <string name="app_name">Ресторан Мени</string>
     <string name="action_settings">Подесувања</string>
     <string name="language">Јазик</string>
+    <string name="contetntDescriptor">Слика од групата</string>
 
 </resources>
