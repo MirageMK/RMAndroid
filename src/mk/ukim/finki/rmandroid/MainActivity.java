@@ -155,17 +155,12 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
 	public static class SectionFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
 		DrawableManager dm;
 		Group group;
+		String[] values;
+		ArrayAdapter<String> adapter;
+		ListView listView;
 
 		public SectionFragment() {
 		}
@@ -173,24 +168,26 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			dm = (DrawableManager) getArguments().getSerializable("DrawableManager");
+			values = new String[] { "Android", "iPhone", "WindowsMobile",
+					"Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+					"Linux", "OS/2" };
+			adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+					android.R.layout.simple_list_item_1, values);
+			dm = (DrawableManager) getArguments().getSerializable(
+					"DrawableManager");
 			group = (Group) getArguments().getSerializable("Group");
 
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
 			ImageView imgGroup = (ImageView) rootView
 					.findViewById(R.id.imgGroup);
-			ListView listView = (ListView) rootView.findViewById(R.id.lvItems);
-			String[] values = new String[] { "Android", "iPhone",
-					"WindowsMobile", "Blackberry", "WebOS", "Ubuntu",
-					"Windows7", "Max OS X", "Linux", "OS/2" };
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-					getActivity().getBaseContext(),
-					android.R.layout.simple_list_item_1, values);
+			listView = (ListView) rootView.findViewById(R.id.lvItems);
+
 			listView.setAdapter(adapter);
 			dm.fetchDrawableOnThread(group.getBackgroundImage(), imgGroup);
 			return rootView;
 		}
+
 	}
 
 }

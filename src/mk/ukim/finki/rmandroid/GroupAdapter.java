@@ -54,4 +54,9 @@ public class GroupAdapter extends ArrayAdapter<Group> {
 		ImageView imgIcon;
 		TextView txtTitle;
 	}
+
+	public void setData(Group[] data) {
+		this.data = data;
+		notifyDataSetChanged();
+	}
 }

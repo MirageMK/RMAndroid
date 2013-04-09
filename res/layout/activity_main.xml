@@ -6,8 +6,8 @@
     tools:context=".MainActivity" >
 
     <!--
-    This title strip will display the currently visible page title, as well as the page
-    titles for adjacent pages.
+	This title strip will display the currently visible page title, 
+	as well as the page titles for adjacent pages.
     -->
 
     <android.support.v4.view.PagerTitleStrip
