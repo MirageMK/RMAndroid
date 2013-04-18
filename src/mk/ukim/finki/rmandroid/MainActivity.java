@@ -1,7 +1,7 @@
 package mk.ukim.finki.rmandroid;
 
 import mk.ukim.finki.rmandroid.model.Group;
-import mk.ukim.finki.rmandroid.utility.DrawableManager;
+import mk.ukim.finki.rmandroid.utils.DrawableManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

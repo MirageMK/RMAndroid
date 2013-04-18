@@ -52,4 +52,28 @@ public class Group implements Serializable{
 	public String getTitle() {
 		return title;
 	}
+	
+	public void setBackgroundImage(String backgroundImage) {
+		this.backgroundImage = backgroundImage;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public void setID(int iD) {
+		ID = iD;
+	}
+	
+	public void setKey(String key) {
+		this.key = key;
+	}
+	
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
 }

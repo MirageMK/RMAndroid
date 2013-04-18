@@ -1,4 +1,4 @@
-package mk.ukim.finki.rmandroid.utility;
+package mk.ukim.finki.rmandroid.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

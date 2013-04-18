@@ -1,7 +1,10 @@
-package mk.ukim.finki.rmandroid;
+package mk.ukim.finki.rmandroid.adapters;
 
+import java.util.List;
+
+import mk.ukim.finki.rmandroid.R;
 import mk.ukim.finki.rmandroid.model.Group;
-import mk.ukim.finki.rmandroid.utility.DrawableManager;
+import mk.ukim.finki.rmandroid.utils.DrawableManager;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,10 +17,10 @@ import android.widget.TextView;
 public class GroupAdapter extends ArrayAdapter<Group> {
 	Context context;
 	int layoutResourceId;
-	Group data[] = null;
+	List<Group> data = null;
 	DrawableManager dm;
 
-	public GroupAdapter(Context context, int layoutResourceId, Group[] data) {
+	public GroupAdapter(Context context, int layoutResourceId, List<Group> data) {
 		super(context, layoutResourceId, data);
 		this.layoutResourceId = layoutResourceId;
 		this.context = context;
@@ -43,7 +46,7 @@ public class GroupAdapter extends ArrayAdapter<Group> {
 			holder = (GroupHolder) row.getTag();
 		}
 
-		Group group = data[position];
+		Group group = data.get(position);
 		holder.txtTitle.setText(group.getTitle());
 		dm.fetchDrawableOnThread(group.getBackgroundImage(), holder.imgIcon);
 
@@ -55,8 +58,8 @@ public class GroupAdapter extends ArrayAdapter<Group> {
 		TextView txtTitle;
 	}
 
-	public void setData(Group[] data) {
-		this.data = data;
+	public void setData(List<Group> data) {
+		this.data.addAll(data);
 		notifyDataSetChanged();
 	}
 }
