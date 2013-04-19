@@ -2,6 +2,7 @@ package mk.ukim.finki.rmandroid;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import mk.ukim.finki.rmandroid.adapters.GroupAdapter;
 import mk.ukim.finki.rmandroid.database.GetDataFromDB;
@@ -30,7 +31,7 @@ public class StartActivity extends Activity {
 
 	private static final long ONE_DAY = 24 * 60 * 60 * 1000;
 	private PullToRefreshListView lvGropus;
-	private ArrayList<Group> group_data;
+	private List<Group> group_data;
 	private GroupAdapter adapter;
 	private GetDataFromDB task;
 
