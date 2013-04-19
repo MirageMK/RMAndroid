@@ -42,8 +42,8 @@ public class RMDao {
 			return false;
 		}
 	}
-	
-	public void delete(){
+
+	public void delete() {
 		database.delete(RMDbOpenHelper.TABLE_GROUP, null, null);
 	}
 

@@ -1,6 +1,7 @@
 package mk.ukim.finki.rmandroid.webservicecomunication;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,6 +12,7 @@ import mk.ukim.finki.rmandroid.utils.RestClient;
 import mk.ukim.finki.rmandroid.utils.RestClient.RequestMethod;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -50,6 +52,7 @@ public class GetDataTask extends AsyncTask<String, Void, ArrayList<Group>> {
 			}
 
 		} catch (Exception e) {
+			exception = e;
 		}
 		return temp_data;
 	}
@@ -70,6 +73,13 @@ public class GetDataTask extends AsyncTask<String, Void, ArrayList<Group>> {
 				dao.insert(group);
 			}
 			dao.close();
+
+			SharedPreferences sharedPref = context.getSharedPreferences(
+					"RMSharedPref", android.content.Context.MODE_PRIVATE);
+			SharedPreferences.Editor prefEditor = sharedPref.edit();
+			prefEditor.putLong("lastUpdate", new Date().getTime());
+			prefEditor.commit();
+
 			Intent intent = new Intent(ITEMS_DOWNLOADED_ACTION);
 			context.sendBroadcast(intent);
 
