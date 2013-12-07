@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Ресторан Мени</string>
+    <string name="app_name">Мени СЕГА!</string>
     <string name="action_settings">Подесувања</string>
     <string name="language">Јазик</string>
     <string name="contetntDescriptor">Слика од групата</string>
+    <string name="callWaiter">Повикај келнер</string>
 
 </resources>

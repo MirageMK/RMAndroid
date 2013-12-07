@@ -1,10 +1,13 @@
 package mk.ukim.finki.rmandroid;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import mk.ukim.finki.rmandroid.database.GetItemsFromDB;
 import mk.ukim.finki.rmandroid.database.RMDao;
 import mk.ukim.finki.rmandroid.model.Group;
 import mk.ukim.finki.rmandroid.utils.DrawableManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
 
@@ -40,17 +44,21 @@ public class MainActivity extends FragmentActivity {
 	ViewPager mViewPager;
 	public DrawableManager dm;
 	private List<Group> group_data;
+	private static GetItemsFromDB task;
+	private static Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		context = this;
+
 		dm = new DrawableManager();
-		
+
 		RMDao mDao = new RMDao(this);
 		mDao.open();
-		group_data = mDao.getAllItems();
+		group_data = mDao.getAllGroups();
 		mDao.close();
 
 		// Show the Up button in the action bar.
@@ -90,6 +98,8 @@ public class MainActivity extends FragmentActivity {
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
+		case R.id.callWaiter:
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -137,6 +147,8 @@ public class MainActivity extends FragmentActivity {
 		String[] values;
 		ArrayAdapter<String> adapter;
 		ListView listView;
+		ImageView imgGroup;
+		TextView groupSubtitle;
 
 		public SectionFragment() {
 		}
@@ -144,23 +156,30 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			values = new String[] { "Android", "iPhone", "WindowsMobile",
-					"Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-					"Linux", "OS/2" };
+			ArrayList<String> values = new ArrayList<String>();
+			// values = new String[]{};
+
 			adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
 					android.R.layout.simple_list_item_1, values);
+
 			dm = (DrawableManager) getArguments().getSerializable(
 					"DrawableManager");
 			group = (Group) getArguments().getSerializable("Group");
 
+			task = new GetItemsFromDB(context, adapter);
+			task.execute(group.getKey());
+
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
-			ImageView imgGroup = (ImageView) rootView
-					.findViewById(R.id.imgGroup);
+
 			listView = (ListView) rootView.findViewById(R.id.lvItems);
+			imgGroup = (ImageView) rootView.findViewById(R.id.imgGroup);
+			// groupSubtitle = (TextView)
+			// rootView.findViewById(R.id.groupSubtitle);
 
 			listView.setAdapter(adapter);
 			dm.fetchDrawableOnThread(group.getBackgroundImage(), imgGroup);
+			// groupSubtitle.setText(group.getSubtitle());
 			return rootView;
 		}
 

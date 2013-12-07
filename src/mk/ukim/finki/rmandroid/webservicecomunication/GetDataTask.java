@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import mk.ukim.finki.rmandroid.database.RMDao;
 import mk.ukim.finki.rmandroid.model.Group;
+import mk.ukim.finki.rmandroid.model.Item;
 import mk.ukim.finki.rmandroid.utils.RestClient;
 import mk.ukim.finki.rmandroid.utils.RestClient.RequestMethod;
 import android.content.Context;
@@ -16,28 +17,51 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-public class GetDataTask extends AsyncTask<String, Void, ArrayList<Group>> {
+public class GetDataTask extends AsyncTask<String, Void, ArrayList<Item>> {
 
 	public static final String ITEMS_DOWNLOADED_ACTION = "mk.ukim.finki.rmandroid.ITEMS_DOWNLOADED_ACTION";
 	private Exception exception = null;
 	protected Context context;
+	ArrayList<Group> groups;
 
 	public GetDataTask(Context context) {
 		this.context = context;
+		this.groups = new ArrayList<Group>();
 	}
 
 	@Override
-	protected ArrayList<Group> doInBackground(String... params) {
-		RestClient client = new RestClient(params[0]);
+	protected ArrayList<Item> doInBackground(String... params) {
+		RestClient client = new RestClient(params[1]);
 		// http://rmservice.apphb.com/Service1.svc/
 		// Simulates a background job.
-		ArrayList<Group> temp_data = new ArrayList<Group>();
+		ArrayList<Item> items = new ArrayList<Item>();
 		try {
 			client.Execute(RequestMethod.GET);
 			String response = client.getResponse();
 
 			JSONObject json = new JSONObject(response);
-			JSONArray jsonItems = json.getJSONArray("getAllGroupsResult");
+			JSONArray jsonItems = json.getJSONArray("getAllItemsResult");
+
+			for (int i = 0; i < jsonItems.length(); i++) {
+				JSONObject jObj = (JSONObject) jsonItems.get(i);
+				Item item = new Item();
+				item.setID(jObj.getInt("ID"));
+				item.setBackgroundImage(jObj.getString("backgroundImage"));
+				item.setContent(jObj.getString("content"));
+				item.setDescription(jObj.getString("description"));
+				item.setGroupKey(jObj.getJSONObject("group").getString("key"));
+				item.setSubtitle(jObj.getString("subtitle"));
+				item.setTitle(jObj.getString("title"));
+				items.add(item);
+			}
+
+			/* GET GROUPS */
+			client = new RestClient(params[0]);
+			client.Execute(RequestMethod.GET);
+			response = client.getResponse();
+
+			json = new JSONObject(response);
+			jsonItems = json.getJSONArray("getAllGroupsResult");
 
 			for (int i = 0; i < jsonItems.length(); i++) {
 				JSONObject jObj = (JSONObject) jsonItems.get(i);
@@ -48,17 +72,17 @@ public class GetDataTask extends AsyncTask<String, Void, ArrayList<Group>> {
 				group.setKey(jObj.getString("key"));
 				group.setSubtitle(jObj.getString("subtitle"));
 				group.setTitle(jObj.getString("title"));
-				temp_data.add(group);
+				groups.add(group);
 			}
 
 		} catch (Exception e) {
 			exception = e;
 		}
-		return temp_data;
+		return items;
 	}
 
 	@Override
-	protected void onPostExecute(ArrayList<Group> result) {
+	protected void onPostExecute(ArrayList<Item> result) {
 		super.onPostExecute(result);
 		if (exception != null) {
 			Toast.makeText(context, "Error: " + exception.getMessage(),
@@ -68,10 +92,16 @@ public class GetDataTask extends AsyncTask<String, Void, ArrayList<Group>> {
 			RMDao dao = new RMDao(context);
 			dao.open();
 
-			dao.delete();
-			for (Group group : result) {
-				dao.insert(group);
+			dao.deleteGroup();
+			for (Group group : groups) {
+				dao.insertGroup(group);
 			}
+			
+			dao.deleteItem();
+			for (Item item : result) {
+				dao.insertItem(item);
+			}
+			
 			dao.close();
 
 			SharedPreferences sharedPref = context.getSharedPreferences(

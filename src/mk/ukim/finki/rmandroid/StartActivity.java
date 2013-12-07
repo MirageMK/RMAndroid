@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import mk.ukim.finki.rmandroid.adapters.GroupAdapter;
-import mk.ukim.finki.rmandroid.database.GetDataFromDB;
+import mk.ukim.finki.rmandroid.database.GetGroupsFromDB;
 import mk.ukim.finki.rmandroid.model.Group;
 import mk.ukim.finki.rmandroid.webservicecomunication.GetDataTask;
 import android.app.Activity;
@@ -33,7 +33,7 @@ public class StartActivity extends Activity {
 	private PullToRefreshListView lvGropus;
 	private List<Group> group_data;
 	private GroupAdapter adapter;
-	private GetDataFromDB task;
+	private GetGroupsFromDB task;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class StartActivity extends Activity {
 		if (currentTime - lastUpdateTime < ONE_DAY) {
 			Toast.makeText(this, "Downloading from Database...",
 					Toast.LENGTH_LONG).show();
-			task = new GetDataFromDB(this, adapter);
+			task = new GetGroupsFromDB(this, adapter);
 			task.execute();
 		} else {
 			Toast.makeText(this, "Downloading from Server...",
@@ -104,6 +104,9 @@ public class StartActivity extends Activity {
 			intent.setClassName("com.android.settings",
 					"com.android.settings.LanguageSettings");
 			startActivity(intent);
+			break;
+		case R.id.callWaiter:
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -111,7 +114,7 @@ public class StartActivity extends Activity {
 	class OnDownloadRefreshReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			task = new GetDataFromDB(StartActivity.this, adapter);
+			task = new GetGroupsFromDB(StartActivity.this, adapter);
 			task.execute();
 
 			// Call onRefreshComplete when the list has been refreshed.

@@ -7,10 +7,13 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import mk.ukim.finki.rmandroid.R;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
@@ -63,21 +66,30 @@ public class DrawableManager implements Serializable {
 
 	public void fetchDrawableOnThread(final String urlString,
 			final ImageView imageView) {
+		imageView.setBackgroundResource(R.drawable.loading);
+
+		final AnimationDrawable frameAnimation = (AnimationDrawable) imageView
+				.getBackground();
+		frameAnimation.start();
+		
 		if (drawableMap.containsKey(urlString)) {
 			imageView.setImageDrawable(drawableMap.get(urlString));
+			frameAnimation.stop();
+			imageView.setBackgroundResource(0);
 		}
 
 		final Handler handler = new Handler() {
 			@Override
 			public void handleMessage(Message message) {
 				imageView.setImageDrawable((Drawable) message.obj);
+				frameAnimation.stop();
+				imageView.setBackgroundResource(0);
 			}
 		};
 
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
-				// TODO : set imageView to a "pending" image
 				Drawable drawable = fetchDrawable(urlString);
 				Message message = handler.obtainMessage(1, drawable);
 				handler.sendMessage(message);

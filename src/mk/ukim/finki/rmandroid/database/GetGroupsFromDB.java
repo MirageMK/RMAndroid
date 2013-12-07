@@ -7,13 +7,13 @@ import mk.ukim.finki.rmandroid.model.Group;
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class GetDataFromDB extends AsyncTask<Void, Void, List<Group>> {
+public class GetGroupsFromDB extends AsyncTask<Void, Void, List<Group>> {
 
 	protected Context context;
 	protected RMDao mDao;
 	protected GroupAdapter adapter;
 
-	public GetDataFromDB(Context context, GroupAdapter adapter) {
+	public GetGroupsFromDB(Context context, GroupAdapter adapter) {
 		this.context = context;
 		this.mDao = new RMDao(context);
 		this.adapter = adapter;
@@ -28,7 +28,7 @@ public class GetDataFromDB extends AsyncTask<Void, Void, List<Group>> {
 	@Override
 	protected List<Group> doInBackground(Void... params) {
 		// Simulates a background job.
-		return mDao.getAllItems();
+		return mDao.getAllGroups();
 	}
 
 	@Override

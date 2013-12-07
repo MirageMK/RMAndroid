@@ -15,7 +15,8 @@ public class DownloadService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		GetDataTask task = new GetDataTask(this);
-		task.execute("http://rmservice.apphb.com/Service1.svc/getAllGroups");
+		task.execute("http://rmservice.apphb.com/Service1.svc/getAllGroups",
+				"http://rmservice.apphb.com/Service1.svc/getAllItems");
 
 		return super.onStartCommand(intent, flags, startId);
 	}

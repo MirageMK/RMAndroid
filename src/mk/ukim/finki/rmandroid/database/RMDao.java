@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mk.ukim.finki.rmandroid.model.Group;
+import mk.ukim.finki.rmandroid.model.Item;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,10 +15,16 @@ public class RMDao {
 	// Database fields
 	private SQLiteDatabase database;
 	private RMDbOpenHelper dbHelper;
-	private String[] allColumns = { RMDbOpenHelper.COLUMN_ID,
+	private String[] allColumnsGroup = { RMDbOpenHelper.COLUMN_ID,
 			RMDbOpenHelper.COLUMN_BACKGROUND_IMAGE,
 			RMDbOpenHelper.COLUMN_DESCRIPTION, RMDbOpenHelper.COLUMN_KEY,
 			RMDbOpenHelper.COLUMN_SUBTITLE, RMDbOpenHelper.COLUMN_TITLE };
+
+	private String[] allColumnsItem = { RMDbOpenHelper.COLUMN_ID,
+			RMDbOpenHelper.COLUMN_BACKGROUND_IMAGE,
+			RMDbOpenHelper.COLUMN_CONTENT, RMDbOpenHelper.COLUMN_DESCRIPTION,
+			RMDbOpenHelper.COLUMN_GROUPKEY, RMDbOpenHelper.COLUMN_SUBTITLE,
+			RMDbOpenHelper.COLUMN_TITLE };
 
 	public RMDao(Context context) {
 		dbHelper = new RMDbOpenHelper(context);
@@ -32,9 +39,9 @@ public class RMDao {
 		dbHelper.close();
 	}
 
-	public boolean insert(Group group) {
+	public boolean insertGroup(Group group) {
 		long insertId = database.insert(RMDbOpenHelper.TABLE_GROUP, null,
-				itemToContentValues(group));
+				groupToContentValues(group));
 
 		if (insertId > 0) {
 			return true;
@@ -43,26 +50,26 @@ public class RMDao {
 		}
 	}
 
-	public void delete() {
+	public void deleteGroup() {
 		database.delete(RMDbOpenHelper.TABLE_GROUP, null, null);
 	}
 
-	public List<Group> getAllItems() {
+	public List<Group> getAllGroups() {
 		List<Group> groups = new ArrayList<Group>();
 
-		Cursor cursor = database.query(RMDbOpenHelper.TABLE_GROUP, allColumns,
-				null, null, null, null, null);
+		Cursor cursor = database.query(RMDbOpenHelper.TABLE_GROUP,
+				allColumnsGroup, null, null, null, null, null);
 
 		if (cursor.moveToFirst()) {
 			do {
-				groups.add(cursorToItem(cursor));
+				groups.add(cursorToGroup(cursor));
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
 		return groups;
 	}
 
-	protected Group cursorToItem(Cursor cursor) {
+	protected Group cursorToGroup(Cursor cursor) {
 		Group group = new Group();
 		group.setID(cursor.getInt(cursor
 				.getColumnIndex(RMDbOpenHelper.COLUMN_ID)));
@@ -82,7 +89,7 @@ public class RMDao {
 		return group;
 	}
 
-	protected ContentValues itemToContentValues(Group group) {
+	protected ContentValues groupToContentValues(Group group) {
 		ContentValues values = new ContentValues();
 
 		values.put(RMDbOpenHelper.COLUMN_ID, group.getID());
@@ -92,6 +99,74 @@ public class RMDao {
 		values.put(RMDbOpenHelper.COLUMN_KEY, group.getKey());
 		values.put(RMDbOpenHelper.COLUMN_SUBTITLE, group.getSubtitle());
 		values.put(RMDbOpenHelper.COLUMN_TITLE, group.getTitle());
+		return values;
+	}
+
+	public boolean insertItem(Item item) {
+		long insertId = database.insert(RMDbOpenHelper.TABLE_ITEM, null,
+				itemToContentValues(item));
+
+		if (insertId > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void deleteItem() {
+		database.delete(RMDbOpenHelper.TABLE_ITEM, null, null);
+	}
+
+	public List<Item> getAllItems(String key) {
+		List<Item> items = new ArrayList<Item>();
+
+		Cursor cursor = database.query(RMDbOpenHelper.TABLE_ITEM,
+				allColumnsItem, RMDbOpenHelper.COLUMN_GROUPKEY + "=?",
+				new String[] { key }, null, null, null);
+
+		if (cursor.moveToFirst()) {
+			do {
+				items.add(cursorToItem(cursor));
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		return items;
+	}
+
+	protected Item cursorToItem(Cursor cursor) {
+		Item item = new Item();
+		item.setID(cursor.getInt(cursor
+				.getColumnIndex(RMDbOpenHelper.COLUMN_ID)));
+
+		item.setBackgroundImage(cursor.getString(cursor
+				.getColumnIndex(RMDbOpenHelper.COLUMN_BACKGROUND_IMAGE)));
+
+		item.setContent(cursor.getString(cursor
+				.getColumnIndex(RMDbOpenHelper.COLUMN_CONTENT)));
+
+		item.setDescription(cursor.getString(cursor
+				.getColumnIndex(RMDbOpenHelper.COLUMN_DESCRIPTION)));
+		item.setGroupKey(cursor.getString(cursor
+				.getColumnIndex(RMDbOpenHelper.COLUMN_GROUPKEY)));
+		item.setSubtitle(cursor.getString(cursor
+				.getColumnIndex(RMDbOpenHelper.COLUMN_SUBTITLE)));
+		item.setTitle(cursor.getString(cursor
+				.getColumnIndex(RMDbOpenHelper.COLUMN_TITLE)));
+
+		return item;
+	}
+
+	protected ContentValues itemToContentValues(Item item) {
+		ContentValues values = new ContentValues();
+
+		values.put(RMDbOpenHelper.COLUMN_ID, item.getID());
+		values.put(RMDbOpenHelper.COLUMN_BACKGROUND_IMAGE,
+				item.getBackgroundImage());
+		values.put(RMDbOpenHelper.COLUMN_CONTENT, item.getContent());
+		values.put(RMDbOpenHelper.COLUMN_DESCRIPTION, item.getDescription());
+		values.put(RMDbOpenHelper.COLUMN_GROUPKEY, item.getGroupKey());
+		values.put(RMDbOpenHelper.COLUMN_SUBTITLE, item.getSubtitle());
+		values.put(RMDbOpenHelper.COLUMN_TITLE, item.getTitle());
 		return values;
 	}
 }
