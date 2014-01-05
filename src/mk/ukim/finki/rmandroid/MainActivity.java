@@ -3,12 +3,13 @@ package mk.ukim.finki.rmandroid;
 import java.util.ArrayList;
 import java.util.List;
 
-import mk.ukim.finki.rmandroid.database.GetItemsFromDB;
 import mk.ukim.finki.rmandroid.database.RMDao;
 import mk.ukim.finki.rmandroid.model.Group;
+import mk.ukim.finki.rmandroid.model.Item;
 import mk.ukim.finki.rmandroid.utils.DrawableManager;
-import android.content.Context;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -21,10 +22,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
 
@@ -44,15 +46,15 @@ public class MainActivity extends FragmentActivity {
 	ViewPager mViewPager;
 	public DrawableManager dm;
 	private List<Group> group_data;
-	private static GetItemsFromDB task;
-	private static Context context;
+	//private static GetItemsFromDB task;
+	//private static Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		context = this;
+		//context = this;
 
 		dm = new DrawableManager();
 
@@ -62,7 +64,7 @@ public class MainActivity extends FragmentActivity {
 		mDao.close();
 
 		// Show the Up button in the action bar.
-		// getActionBar().setDisplayHomeAsUpEnabled(true);
+		setupActionBar();
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
@@ -76,6 +78,16 @@ public class MainActivity extends FragmentActivity {
 		Intent i = getIntent();
 		mViewPager.setCurrentItem(i.getIntExtra("position", 0));
 
+	}
+	
+	/**
+	 * Set up the {@link android.app.ActionBar}, if the API is available.
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void setupActionBar() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 	}
 
 	@Override
@@ -99,6 +111,8 @@ public class MainActivity extends FragmentActivity {
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		case R.id.callWaiter:
+			Intent i = new Intent(MainActivity.this, CallWaiterActivity.class);
+			startActivity(i);
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -142,13 +156,14 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public static class SectionFragment extends Fragment {
-		DrawableManager dm;
-		Group group;
-		String[] values;
-		ArrayAdapter<String> adapter;
-		ListView listView;
-		ImageView imgGroup;
-		TextView groupSubtitle;
+		private transient DrawableManager dm;
+		private Group group;
+		//private String[] values;
+		private ArrayAdapter<String> adapter;
+		private List<Item> item_data;
+		private ListView listView;
+		private ImageView imgGroup;
+		//private TextView groupSubtitle;
 
 		public SectionFragment() {
 		}
@@ -166,9 +181,16 @@ public class MainActivity extends FragmentActivity {
 					"DrawableManager");
 			group = (Group) getArguments().getSerializable("Group");
 
-			task = new GetItemsFromDB(context, adapter);
-			task.execute(group.getKey());
+			/*task = new GetItemsFromDB(context, adapter);
+			task.execute(group.getKey());*/
+			RMDao mDao = new RMDao(getActivity());
+			mDao.open();
+			item_data = mDao.getAllItems(group.getKey());
+			mDao.close();
 
+			for (Item i : item_data)
+				adapter.add(i.getTitle());
+			
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
 
@@ -178,11 +200,21 @@ public class MainActivity extends FragmentActivity {
 			// rootView.findViewById(R.id.groupSubtitle);
 
 			listView.setAdapter(adapter);
+			listView.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					Intent i = new Intent(getActivity(), ItemActivity.class);
+					i.putExtra("Item", item_data.get(position));
+					startActivity(i);
+					
+				}
+			});
 			dm.fetchDrawableOnThread(group.getBackgroundImage(), imgGroup);
 			// groupSubtitle.setText(group.getSubtitle());
 			return rootView;
 		}
-
 	}
 
 }

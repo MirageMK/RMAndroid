@@ -106,6 +106,8 @@ public class StartActivity extends Activity {
 			startActivity(intent);
 			break;
 		case R.id.callWaiter:
+			Intent i = new Intent(StartActivity.this, CallWaiterActivity.class);
+			startActivity(i);
 			break;
 		}
 		return super.onOptionsItemSelected(item);

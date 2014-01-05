@@ -27,8 +27,28 @@
         <activity
             android:name="mk.ukim.finki.rmandroid.MainActivity"
             android:label="@string/app_name" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mk.ukim.finki.rmandroid.StartActivity" />
         </activity>
-        <service android:name="mk.ukim.finki.rmandroid.DownloadService"></service>
+
+        <service android:name="mk.ukim.finki.rmandroid.DownloadService" >
+        </service>
+
+        <activity
+            android:name="mk.ukim.finki.rmandroid.ItemActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="mk.ukim.finki.rmandroid.MainActivity"
+            android:theme="@android:style/Theme.Dialog" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mk.ukim.finki.rmandroid.MainActivity" />
+        </activity>
+        <activity
+            android:name="mk.ukim.finki.rmandroid.CallWaiterActivity"
+            android:label="@string/callWaiter"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
     </application>
 
 </manifest>

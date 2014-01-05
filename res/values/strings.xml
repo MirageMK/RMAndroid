@@ -6,5 +6,17 @@
     <string name="language">Language</string>
     <string name="contetntDescriptor">Picture of the gruop</string>
     <string name="callWaiter">Call waiter</string>
+    <string name="addToCart">Add to Cart</string>
+    <string name="quantity">Quantity</string>
+    <string name="price">Price:&#160;</string>
+    <string name="addedToCart">Item added to your cart</string>
+    <string name="invalidQuantity">Please enter a valid Quantity</string>
+    <string name="callWaiterText"><u><i>Your order:</i></u></string>
+    <string name="total"><u>Total:</u>&#160;</string>
+    <string name="callTo">Call to:</string>
+    <string name="order">Order</string>
+    <string name="pay">Pay</string>
+    <string name="waiterIsComing">Your waiter will come shortly</string>
+    <string name="multiply">&#160;*&#160;</string>
 
 </resources>

@@ -25,7 +25,7 @@ public class DrawableManager implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final Map<String, Drawable> drawableMap;
+	private transient final Map<String, Drawable> drawableMap;
 
 	public DrawableManager() {
 		drawableMap = new HashMap<String, Drawable>();

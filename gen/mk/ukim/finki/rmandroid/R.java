@@ -183,40 +183,60 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int loading7=0x7f02000e;
     }
     public static final class id {
+        public static final int addToCart=0x7f050019;
         public static final int both=0x7f050003;
-        public static final int callWaiter=0x7f050018;
+        public static final int callWaiter=0x7f05000d;
         public static final int disabled=0x7f050000;
-        public static final int fl_inner=0x7f050013;
+        public static final int etQuantity=0x7f050018;
+        public static final int fl_inner=0x7f050025;
         public static final int flip=0x7f050008;
         public static final int gridview=0x7f050009;
-        public static final int imgGroup=0x7f05000f;
-        public static final int ivIcon=0x7f050011;
-        public static final int language=0x7f050019;
-        public static final int lvGroups=0x7f05000e;
-        public static final int lvItems=0x7f050010;
+        public static final int imgGroup=0x7f05001d;
+        public static final int imgItem=0x7f050014;
+        public static final int ivIcon=0x7f05001f;
+        public static final int language=0x7f05002a;
+        public static final int lvGroups=0x7f05001c;
+        public static final int lvItems=0x7f05001e;
+        public static final int lvOrders=0x7f050010;
         public static final int manualOnly=0x7f050004;
-        public static final int pager=0x7f05000c;
-        public static final int pager_title_strip=0x7f05000d;
+        public static final int pager=0x7f05001a;
+        public static final int pager_title_strip=0x7f05001b;
         public static final int pullDownFromTop=0x7f050005;
         public static final int pullFromEnd=0x7f050002;
         public static final int pullFromStart=0x7f050001;
         public static final int pullUpFromBottom=0x7f050006;
-        public static final int pull_to_refresh_image=0x7f050014;
-        public static final int pull_to_refresh_progress=0x7f050015;
-        public static final int pull_to_refresh_sub_text=0x7f050017;
-        public static final int pull_to_refresh_text=0x7f050016;
+        public static final int pull_to_refresh_image=0x7f050026;
+        public static final int pull_to_refresh_progress=0x7f050027;
+        public static final int pull_to_refresh_sub_text=0x7f050029;
+        public static final int pull_to_refresh_text=0x7f050028;
+        public static final int rOrder=0x7f050012;
+        public static final int rType=0x7f050013;
+        public static final int rgCallType=0x7f050011;
         public static final int rotate=0x7f050007;
         public static final int scrollview=0x7f05000b;
-        public static final int tvTitle=0x7f050012;
+        public static final int textTotal=0x7f05000f;
+        public static final int textView=0x7f05000c;
+        public static final int tvContent=0x7f050016;
+        public static final int tvDescription=0x7f050015;
+        public static final int tvOPrice=0x7f050022;
+        public static final int tvOQuantity=0x7f050023;
+        public static final int tvOSubtotal=0x7f050024;
+        public static final int tvOTitle=0x7f050021;
+        public static final int tvSubtitle=0x7f050017;
+        public static final int tvTitle=0x7f050020;
+        public static final int tvTotal=0x7f05000e;
         public static final int webview=0x7f05000a;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
-        public static final int activity_start=0x7f030001;
-        public static final int fragment_main=0x7f030002;
-        public static final int listview_item_row_group=0x7f030003;
-        public static final int pull_to_refresh_header_horizontal=0x7f030004;
-        public static final int pull_to_refresh_header_vertical=0x7f030005;
+        public static final int activity_call_waiter=0x7f030000;
+        public static final int activity_item=0x7f030001;
+        public static final int activity_main=0x7f030002;
+        public static final int activity_start=0x7f030003;
+        public static final int fragment_main=0x7f030004;
+        public static final int listview_item_row_group=0x7f030005;
+        public static final int listview_item_row_oreder_item=0x7f030006;
+        public static final int pull_to_refresh_header_horizontal=0x7f030007;
+        public static final int pull_to_refresh_header_vertical=0x7f030008;
     }
     public static final class menu {
         public static final int main=0x7f090000;
@@ -224,10 +244,19 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class string {
         public static final int action_settings=0x7f070007;
+        public static final int addToCart=0x7f07000b;
+        public static final int addedToCart=0x7f07000e;
         public static final int app_name=0x7f070006;
+        public static final int callTo=0x7f070012;
         public static final int callWaiter=0x7f07000a;
+        public static final int callWaiterText=0x7f070010;
         public static final int contetntDescriptor=0x7f070009;
+        public static final int invalidQuantity=0x7f07000f;
         public static final int language=0x7f070008;
+        public static final int multiply=0x7f070016;
+        public static final int order=0x7f070013;
+        public static final int pay=0x7f070014;
+        public static final int price=0x7f07000d;
         /**  Just use standard Pull Down String when pulling up. These can be set for languages which require it 
  Just use standard Pull Down String when pulling up. These can be set for languages which require it 
          */
@@ -237,6 +266,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int pull_to_refresh_pull_label=0x7f070000;
         public static final int pull_to_refresh_refreshing_label=0x7f070002;
         public static final int pull_to_refresh_release_label=0x7f070001;
+        public static final int quantity=0x7f07000c;
+        public static final int total=0x7f070011;
+        public static final int waiterIsComing=0x7f070015;
     }
     public static final class style {
         /** 

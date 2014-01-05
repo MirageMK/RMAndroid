@@ -6,5 +6,16 @@
     <string name="language">Јазик</string>
     <string name="contetntDescriptor">Слика од групата</string>
     <string name="callWaiter">Повикај келнер</string>
+    <string name="addToCart">Додади во кошничка</string>
+    <string name="quantity">Количина</string>
+    <string name="price">Цена:&#160;</string>
+    <string name="addedToCart">Производот е додаден во кошничка</string>
+    <string name="invalidQuantity">Ве молиме внесете валидна количина</string>
+    <string name="callWaiterText">Вашата нарачка:</string>
+    <string name="total"><u>Вкупно:</u>&#160;</string>
+    <string name="callTo">Повикај за:</string>
+    <string name="order">Нарачка</string>
+    <string name="pay">Плаќање</string>
+    <string name="waiterIsComing">Вашиот келнер ќе пристигне наскоро</string>
 
 </resources>
