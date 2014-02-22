@@ -5,6 +5,8 @@ import java.util.List;
 
 import mk.ukim.finki.rmandroid.adapters.OrderItemAdapter;
 import mk.ukim.finki.rmandroid.model.OrderItem;
+import mk.ukim.finki.rmandroid.utils.RestClient;
+import mk.ukim.finki.rmandroid.utils.RestClient.RequestMethod;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,6 +34,9 @@ public class CallWaiterActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		final SharedPreferences sharedPref = getSharedPreferences(
+				"RMSharedPref", MODE_PRIVATE);
+
 		setContentView(R.layout.activity_call_waiter);
 
 		getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -71,6 +76,27 @@ public class CallWaiterActivity extends Activity {
 					getSharedPreferences(PREFS_NAME, 0).edit().clear().commit();
 				}
 
+				Thread thread = new Thread(new Runnable(){
+				    @Override
+				    public void run() {
+				        try {
+							String lastServiceURL = sharedPref.getString("serviceURL", "");
+							RestClient client = new RestClient(lastServiceURL
+									+ "/sendPushNotification");
+							try {
+								client.Execute(RequestMethod.GET);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+				        } catch (Exception e) {
+				            e.printStackTrace();
+				        }
+				    }
+				});
+
+				thread.start(); 
+				
 				Toast.makeText(CallWaiterActivity.this,
 						R.string.waiterIsComing, Toast.LENGTH_LONG).show();
 				finish();

@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,27 +40,25 @@ public class StartActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
+		
+		try {
+		    Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+		    intent.putExtra("SCAN_MODE", "QR_CODE_MODE"); // "PRODUCT_MODE for bar codes
 
-		SharedPreferences sharedPref = getSharedPreferences("RMSharedPref",
-				MODE_PRIVATE);
-		long lastUpdateTime = sharedPref.getLong("lastUpdate", 0);
-		long currentTime = new Date().getTime();
+		    startActivityForResult(intent, 0);
 
+		} catch (Exception e) {
+
+		    Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+		    Intent marketIntent = new Intent(Intent.ACTION_VIEW,marketUri);
+		    startActivity(marketIntent);
+
+		}
+		
 		group_data = new ArrayList<Group>();
 
 		adapter = new GroupAdapter(this, R.layout.listview_item_row_group,
 				group_data);
-
-		if (currentTime - lastUpdateTime < ONE_DAY) {
-			Toast.makeText(this, "Downloading from Database...",
-					Toast.LENGTH_LONG).show();
-			task = new GetGroupsFromDB(this, adapter);
-			task.execute();
-		} else {
-			Toast.makeText(this, "Downloading from Server...",
-					Toast.LENGTH_LONG).show();
-			getDataFromService();
-		}
 
 		lvGropus = (PullToRefreshListView) findViewById(R.id.lvGroups);
 		lvGropus.setAdapter(adapter);
@@ -125,5 +124,41 @@ public class StartActivity extends Activity {
 			StartActivity.this.unregisterReceiver(this);
 
 		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {           
+	    super.onActivityResult(requestCode, resultCode, data);
+	    if (requestCode == 0) {
+	        if (resultCode == RESULT_OK) {
+	        	String serviceURL = data.getStringExtra("SCAN_RESULT");
+	    		SharedPreferences sharedPref = getSharedPreferences("RMSharedPref",
+	    				MODE_PRIVATE);
+	        	SharedPreferences.Editor prefEditor = sharedPref.edit();
+	    		long lastUpdateTime = sharedPref.getLong("lastUpdate", 0);
+	    		String lastServiceURL = sharedPref.getString("serviceURL", "");
+	    		long currentTime = new Date().getTime();
+	    		
+				prefEditor.putString("serviceURL", serviceURL);
+				prefEditor.commit();
+	            Toast.makeText(StartActivity.this,data.getStringExtra("SCAN_RESULT"), Toast.LENGTH_LONG).show();
+	    		if (!serviceURL.equals(lastServiceURL) || currentTime - lastUpdateTime >= ONE_DAY) {
+	    			Toast.makeText(this, "Downloading from Server...",
+	    					Toast.LENGTH_LONG).show();
+	    			getDataFromService();
+	    		} else {
+	    			Toast.makeText(this, "Downloading from Database...",
+	    					Toast.LENGTH_LONG).show();
+	    			task = new GetGroupsFromDB(this, adapter);
+	    			task.execute();
+	    		}
+	        }
+	        if(resultCode == RESULT_CANCELED){
+	        	Toast.makeText(this, "Downloading from Database...",
+    					Toast.LENGTH_LONG).show();
+    			task = new GetGroupsFromDB(this, adapter);
+    			task.execute();
+	        }
+	    }
 	}
 }

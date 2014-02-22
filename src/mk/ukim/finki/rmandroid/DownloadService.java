@@ -3,6 +3,7 @@ package mk.ukim.finki.rmandroid;
 import mk.ukim.finki.rmandroid.webservicecomunication.GetDataTask;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 
 public class DownloadService extends Service {
@@ -14,9 +15,14 @@ public class DownloadService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		SharedPreferences sharedPref = getSharedPreferences("RMSharedPref",
+				MODE_PRIVATE);
+		
+		String lastServiceURL = sharedPref.getString("serviceURL", "");
+		
 		GetDataTask task = new GetDataTask(this);
-		task.execute("http://rmservice.apphb.com/Service1.svc/getAllGroups",
-				"http://rmservice.apphb.com/Service1.svc/getAllItems");
+		task.execute(lastServiceURL+"/getAllGroups",
+				lastServiceURL+"/getAllItems");
 
 		return super.onStartCommand(intent, flags, startId);
 	}
